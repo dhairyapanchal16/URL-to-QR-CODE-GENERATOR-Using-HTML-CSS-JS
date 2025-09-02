@@ -14,10 +14,11 @@
           <p>Paste your link below to generate a QR code</p>
         </div>
 
-        <form>
+        <!-- Removed form submit issue -->
+        <div class="form">
           <input type="text" placeholder="Enter URL" />
-          <button type="button">Generate QR Code</button>
-        </form>
+          <button id="generateBtn">Generate QR Code</button>
+        </div>
 
         <div class="qr_container">
           <img src="" alt="qr-code" />
