@@ -1,46 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const qrFormEl = document.getElementById("qrForm");
-    const qrImageEl = document.getElementById("qrImage");
-    const qrContainerEl = document.getElementById("qrContainer");
-    const qrInputTextEl = document.getElementById("qrInputText");
-    const generateBtnEl = document.getElementById("generateBtn");
+let qrImage = document.getElementById("qrImage"); 
+let downloadBtn = document.getElementById("downloadBtn");
 
-    const renderQRCode = (url) => {
-        if (!url) return;
-        
-        generateBtnEl.innerText = "Generating QR Code...";
-        
-        // Clear previous QR code to force a reload
-        qrImageEl.src = "";
-        setTimeout(() => {
-            qrImageEl.src = url;
-        }, 100);
+function generateQR() {
+    let qrText = document.getElementById("qrText").value;
+    if (qrText.trim().length === 0) {
+        alert("Please enter a URL or text!");
+        return;
+    }
 
-        qrImageEl.onload = () => {
-            qrContainerEl.classList.add("show");
-            generateBtnEl.innerText = "Generate QR Code";
-        };
-    };
+    // Generate QR Code from API
+    qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + qrText;
 
-    qrFormEl.addEventListener("submit", (event) => {
-        event.preventDefault();
+    // Show download button
+    downloadBtn.style.display = "block";
+}
 
-        const formData = new FormData(qrFormEl);
-        const text = formData.get("qrText").trim();
-        
-        if (!text) {
-            alert("Please enter text to generate QR Code!");
-            return;
-        }
-
-        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(text)}`;
-
-        renderQRCode(qrCodeUrl);
-    });
-
-    qrInputTextEl.addEventListener("keyup", () => {
-        if (!qrInputTextEl.value.trim()) {
-            qrContainerEl.classList.remove("show");
-        }
-    });
+// Download QR Code
+downloadBtn.addEventListener("click", () => {
+    let link = document.createElement("a");
+    link.href = qrImage.src;   // QR image source
+    link.download = "qrcode.png"; // File name
+    link.click();
 });
